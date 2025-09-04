@@ -40,7 +40,7 @@ const addLikeToClothingItem = (req, res) => {
     { new: true }
   )
     .orFail()
-    .then((data) => res.send(data))
+    .then((data) => res.send({ data: data }))
     .catch((err) => {
       const error = filterError(err);
       res.status(error.statusCode).send({ message: error.message });
@@ -55,7 +55,7 @@ const removeLikeFromClothingItem = (req, res) => {
     { new: true }
   )
     .orFail()
-    .then((data) => res.send(data))
+    .then((data) => res.send({ data: data }))
     .catch((err) => {
       const error = filterError(err);
       res.status(error.statusCode).send({ message: error.message });

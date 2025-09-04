@@ -3,7 +3,7 @@ const { filterError } = require("../utils/errors");
 
 const getUsers = (req, res) => {
   User.find({})
-    .then((films) => res.send({ data: films }))
+    .then((users) => res.send({ data: users }))
     .catch((err) => {
       const error = filterError(err);
       res.status(error.statusCode).send({ message: error.message });
