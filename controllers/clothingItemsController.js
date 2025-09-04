@@ -3,10 +3,9 @@ const { filterError } = require("../utils/errors");
 
 const getClothingItems = (req, res) => {
   ClothingItem.find({})
-    .populate("user")
+    .populate("owner")
     .then((clothingItems) => res.send({ data: clothingItems }))
     .catch((err) => {
-      console.log(err.name);
       const error = filterError(err);
       res.status(error.statusCode).send({ message: error.message });
     });
@@ -14,53 +13,53 @@ const getClothingItems = (req, res) => {
 
 const createClothingItem = (req, res) => {
   const { name, weather, imageUrl } = req.body;
-  ClothingItem.create({ name, weather, imageUrl })
+  ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((clothingItem) => res.send({ data: clothingItem }))
     .catch((err) => {
-      console.log(err);
       const error = filterError(err);
       res.status(error.statusCode).send({ message: error.message });
     });
 };
 
 const deleteClothingItem = (req, res) => {
-  const { itemId } = req.params;
-  ClothingItem.findByIdAndDelete(itemId)
+  const { id } = req.params;
+  ClothingItem.findByIdAndDelete(id)
     .orFail()
     .then((clothingItem) => res.send({ data: clothingItem }))
     .catch((err) => {
-      console.log(err.name);
       const error = filterError(err);
       res.status(error.statusCode).send({ message: error.message });
     });
 };
 
 const addLikeToClothingItem = (req, res) => {
-  const { itemId } = req.params.userId;
+  const { id } = req.params;
   ClothingItem.findByIdAndUpdate(
-    itemId,
+    id,
     { $addToSet: { likes: req.user._id } }, // add _id to the array if it's not there yet
     { new: true }
-  ).orFail();
-  then((data) => res.send(data)).catch((err) => {
-    console.log(err.name);
-    const error = filterError(err);
-    res.status(error.statusCode).send({ message: error.message });
-  });
+  )
+    .orFail()
+    .then((data) => res.send(data))
+    .catch((err) => {
+      const error = filterError(err);
+      res.status(error.statusCode).send({ message: error.message });
+    });
 };
 
 const removeLikeFromClothingItem = (req, res) => {
-  const { itemId } = req.params.userId;
+  const { id } = req.params;
   ClothingItem.findByIdAndUpdate(
-    itemId,
+    id,
     { $pull: { likes: req.user._id } }, // add _id to the array if it's not there yet
     { new: true }
-  ).orFail();
-  then((data) => res.send(data)).catch((err) => {
-    console.log(err.name);
-    const error = filterError(err);
-    res.status(error.statusCode).send({ message: error.message });
-  });
+  )
+    .orFail()
+    .then((data) => res.send(data))
+    .catch((err) => {
+      const error = filterError(err);
+      res.status(error.statusCode).send({ message: error.message });
+    });
 };
 
 module.exports = {

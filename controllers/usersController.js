@@ -1,11 +1,10 @@
 const User = require("../models/User");
-const { filterError } = require("../utils/errors.js");
+const { filterError } = require("../utils/errors");
 
 const getUsers = (req, res) => {
   User.find({})
     .then((films) => res.send({ data: films }))
     .catch((err) => {
-      console.log(err.name);
       const error = filterError(err);
       res.status(error.statusCode).send({ message: error.message });
     });
@@ -17,7 +16,6 @@ const getUser = (req, res) => {
     .orFail()
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      console.log(err.name, err);
       const error = filterError(err);
       res.status(error.statusCode).send({ message: error.message });
     });
@@ -28,7 +26,6 @@ const createUser = (req, res) => {
   User.create({ name, avatar })
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      console.log(err.name);
       const error = filterError(err);
       res.status(error.statusCode).send({ message: error.message });
     });
