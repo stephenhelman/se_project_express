@@ -4,17 +4,16 @@ const filterError = (error) => {
       statusCode: 400,
       message: error.message,
     };
-  } else if (error.name === "DocumentNotFoundError") {
+  } if (error.name === "DocumentNotFoundError") {
     return {
       statusCode: 404,
       message: error.message,
     };
-  } else {
-    return {
-      statusCode: 500,
-      message: error.message,
-    };
   }
+  return {
+    statusCode: 500,
+    message: error.message,
+  };
 };
 
 module.exports = { filterError };
