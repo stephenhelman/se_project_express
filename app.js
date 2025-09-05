@@ -1,4 +1,3 @@
-const path = require("path");
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -22,8 +21,6 @@ app.use("/users", require("./routes/usersRoutes"));
 app.use("/items", require("./routes/clothingItemsRoutes"));
 
 app.use("*", require("./routes/index"));
-
-app.use(express.static(path.join(__dirname, "public")));
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port ${PORT}`);

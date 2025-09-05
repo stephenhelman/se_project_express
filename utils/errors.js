@@ -1,18 +1,21 @@
+const { BAD_REQUEST, NOT_FOUND, DEFAULT } = require("./constants");
+
 const filterError = (error) => {
   if (error.name === "ValidationError" || error.name === "CastError") {
     return {
-      statusCode: 400,
+      statusCode: BAD_REQUEST,
       message: error.message,
     };
-  } if (error.name === "DocumentNotFoundError") {
+  }
+  if (error.name === "DocumentNotFoundError") {
     return {
-      statusCode: 404,
+      statusCode: NOT_FOUND,
       message: error.message,
     };
   }
   return {
-    statusCode: 500,
-    message: error.message,
+    statusCode: DEFAULT,
+    message: "An error has occurred on the server",
   };
 };
 
