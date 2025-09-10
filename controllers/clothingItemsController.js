@@ -23,9 +23,17 @@ const createClothingItem = (req, res) => {
 
 const deleteClothingItem = (req, res) => {
   const { id } = req.params;
-  ClothingItem.findByIdAndDelete(id)
-    .orFail()
-    .then((clothingItem) => res.send({ data: clothingItem }))
+  ClothingItem.verifyCredentials(id, req.user._id)
+    .then((authorizedDeletionItem) => {
+      ClothingItem.findByIdAndDelete({
+        _id: authorizedDeletionItem._id.toString(),
+      })
+        .then(() => res.send({ message: "Item deleted successfully" }))
+        .catch((err) => {
+          const error = filterError(err);
+          res.status(error.statusCode).send({ message: error.message });
+        });
+    })
     .catch((err) => {
       const error = filterError(err);
       res.status(error.statusCode).send({ message: error.message });

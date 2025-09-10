@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
+const { FORBIDDEN } = require("../utils/constants");
+const { CustomAPIError } = require("../utils/errors");
 
 const clothingItemSchema = new mongoose.Schema(
   {
@@ -43,5 +45,24 @@ const clothingItemSchema = new mongoose.Schema(
     },
   }
 );
+clothingItemSchema.statics.verifyCredentials = function verifyCredentials(
+  itemId,
+  userId
+) {
+  return this.findById(itemId)
+    .orFail()
+    .then((item) => {
+      if (item.owner.toString() !== userId.toString()) {
+        return Promise.reject(
+          new CustomAPIError(
+            "Forbidden! You do not have the permission to delete another user's items",
+            FORBIDDEN,
+            "ForbiddenError"
+          )
+        );
+      }
+      return item;
+    });
+};
 
 module.exports = mongoose.model("ClothingItem", clothingItemSchema);
