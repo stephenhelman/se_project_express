@@ -1,5 +1,3 @@
-/* eslint no-underscore-dangle: ["error", { "allow": ["_id"] }] */
-
 module.exports = {
   env: {
     es2021: true,

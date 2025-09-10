@@ -26,7 +26,7 @@ const deleteClothingItem = (req, res) => {
   ClothingItem.verifyCredentials(id, req.user._id)
     .then((authorizedDeletionItem) => {
       ClothingItem.findByIdAndDelete({
-        _id: authorizedDeletionItem._id.toString(),
+        _id: authorizedDeletionItem._id,
       })
         .then(() => res.send({ message: "Item deleted successfully" }))
         .catch((err) => {

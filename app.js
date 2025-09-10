@@ -15,8 +15,8 @@ mongoose.connect("mongodb://127.0.0.1:27017/wtwr_db");
 app.use("/users", require("./routes/usersRoutes"));
 app.use("/items", require("./routes/clothingItemsRoutes"));
 
-app.use("/signup", createUser);
-app.use("/signin", login);
+app.post("/signup", createUser);
+app.post("/signin", login);
 
 app.use("*", require("./routes/index"));
 
