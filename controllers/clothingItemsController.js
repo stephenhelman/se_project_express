@@ -47,6 +47,7 @@ const addLikeToClothingItem = (req, res) => {
     { $addToSet: { likes: req.user._id } }, // add _id to the array if it's not there yet
     { new: true }
   )
+    .populate("owner")
     .orFail()
     .then((response) => res.send({ data: response }))
     .catch((err) => {
@@ -62,8 +63,11 @@ const removeLikeFromClothingItem = (req, res) => {
     { $pull: { likes: req.user._id } }, // add _id to the array if it's not there yet
     { new: true }
   )
+    .populate("owner")
     .orFail()
-    .then((response) => res.send({ data: response }))
+    .then((response) => {
+      res.send({ data: response });
+    })
     .catch((err) => {
       const error = filterError(err);
       res.status(error.statusCode).send({ message: error.message });
