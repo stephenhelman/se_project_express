@@ -3,7 +3,6 @@ const { filterError } = require("../utils/errors");
 
 const getClothingItems = (req, res) => {
   ClothingItem.find({})
-    .populate("owner")
     .then((clothingItems) => res.send({ data: clothingItems }))
     .catch((err) => {
       const error = filterError(err);
@@ -47,7 +46,6 @@ const addLikeToClothingItem = (req, res) => {
     { $addToSet: { likes: req.user._id } }, // add _id to the array if it's not there yet
     { new: true }
   )
-    .populate("owner")
     .orFail()
     .then((response) => res.send({ data: response }))
     .catch((err) => {
@@ -63,7 +61,6 @@ const removeLikeFromClothingItem = (req, res) => {
     { $pull: { likes: req.user._id } }, // add _id to the array if it's not there yet
     { new: true }
   )
-    .populate("owner")
     .orFail()
     .then((response) => {
       res.send({ data: response });
