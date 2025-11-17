@@ -17,7 +17,9 @@ const getUsers = (req, res, next) => {
 const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail()
-    .then((user) => res.send({ data: user }))
+    .then((user) => {
+      res.send({ data: user._doc });
+    })
     .catch((err) => {
       const error = filterError(err);
       next(error);
@@ -29,8 +31,7 @@ const createUser = (req, res, next) => {
   bcrypt.hash(password, 10).then((hash) => {
     User.create({ email, password: hash, name, avatar })
       .then((user) => {
-        const { password: hashedPassword, ...userInfo } = user._doc;
-        res.send({ data: userInfo });
+        res.send({ data: user._doc });
       })
       .catch((err) => {
         const error = filterError(err);
@@ -62,7 +63,9 @@ const updateProfile = (req, res, next) => {
     { new: true, runValidators: true }
   )
     .orFail()
-    .then((user) => res.send({ data: user }))
+    .then((user) => {
+      res.send({ data: user._doc });
+    })
     .catch((err) => {
       const error = filterError(err);
       next(error);
