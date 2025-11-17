@@ -1,26 +1,26 @@
 const ClothingItem = require("../models/ClothingItem");
 const { filterError } = require("../utils/errors");
 
-const getClothingItems = (req, res) => {
+const getClothingItems = (req, res, next) => {
   ClothingItem.find({})
     .then((clothingItems) => res.send({ data: clothingItems }))
     .catch((err) => {
       const error = filterError(err);
-      res.status(error.statusCode).send({ message: error.message });
+      next(error);
     });
 };
 
-const createClothingItem = (req, res) => {
+const createClothingItem = (req, res, next) => {
   const { name, weather, imageUrl } = req.body;
   ClothingItem.create({ name, weather, imageUrl, owner: req.user._id })
     .then((clothingItem) => res.send({ data: clothingItem }))
     .catch((err) => {
       const error = filterError(err);
-      res.status(error.statusCode).send({ message: error.message });
+      next(error);
     });
 };
 
-const deleteClothingItem = (req, res) => {
+const deleteClothingItem = (req, res, next) => {
   const { id } = req.params;
   ClothingItem.verifyCredentials(id, req.user._id)
     .then((authorizedDeletionItem) => {
@@ -30,16 +30,16 @@ const deleteClothingItem = (req, res) => {
         .then(() => res.send({ message: "Item deleted successfully" }))
         .catch((err) => {
           const error = filterError(err);
-          res.status(error.statusCode).send({ message: error.message });
+          next(error);
         });
     })
     .catch((err) => {
       const error = filterError(err);
-      res.status(error.statusCode).send({ message: error.message });
+      next(error);
     });
 };
 
-const addLikeToClothingItem = (req, res) => {
+const addLikeToClothingItem = (req, res, next) => {
   const { id } = req.params;
   ClothingItem.findByIdAndUpdate(
     id,
@@ -50,11 +50,11 @@ const addLikeToClothingItem = (req, res) => {
     .then((response) => res.send({ data: response }))
     .catch((err) => {
       const error = filterError(err);
-      res.status(error.statusCode).send({ message: error.message });
+      next(error);
     });
 };
 
-const removeLikeFromClothingItem = (req, res) => {
+const removeLikeFromClothingItem = (req, res, next) => {
   const { id } = req.params;
   ClothingItem.findByIdAndUpdate(
     id,
@@ -67,7 +67,7 @@ const removeLikeFromClothingItem = (req, res) => {
     })
     .catch((err) => {
       const error = filterError(err);
-      res.status(error.statusCode).send({ message: error.message });
+      next(error);
     });
 };
 

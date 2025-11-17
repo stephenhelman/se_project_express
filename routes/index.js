@@ -8,6 +8,12 @@ router.use("/users", require("./usersRoutes"));
 
 router.use("/items", require("./clothingItemsRoutes"));
 
+router.use("/crash-test", () => {
+  setTimeout(() => {
+    throw new Error("Server will crash now");
+  }, 0);
+});
+
 router.post("/signup", createUser);
 router.post("/signin", login);
 

@@ -5,26 +5,26 @@ const User = require("../models/User");
 const { filterError } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
 
-const getUsers = (req, res) => {
+const getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send({ data: users }))
     .catch((err) => {
       const error = filterError(err);
-      res.status(error.statusCode).send({ message: error.message });
+      next(error);
     });
 };
 
-const getCurrentUser = (req, res) => {
+const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail()
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       const error = filterError(err);
-      res.status(error.statusCode).send({ message: error.message });
+      next(error);
     });
 };
 
-const createUser = (req, res) => {
+const createUser = (req, res, next) => {
   const { email, password, name, avatar } = req.body;
   bcrypt.hash(password, 10).then((hash) => {
     User.create({ email, password: hash, name, avatar })
@@ -34,12 +34,12 @@ const createUser = (req, res) => {
       })
       .catch((err) => {
         const error = filterError(err);
-        res.status(error.statusCode).send({ message: error.message });
+        next(error);
       });
   });
 };
 
-const login = (req, res) => {
+const login = (req, res, next) => {
   const { email, password } = req.body;
   User.findUserByCredentials(email, password)
     .then((user) => {
@@ -50,11 +50,11 @@ const login = (req, res) => {
     })
     .catch((err) => {
       const error = filterError(err);
-      res.status(error.statusCode).send({ message: error.message });
+      next(error);
     });
 };
 
-const updateProfile = (req, res) => {
+const updateProfile = (req, res, next) => {
   const { name, avatar } = req.body;
   User.findByIdAndUpdate(
     req.user._id,
@@ -65,7 +65,7 @@ const updateProfile = (req, res) => {
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       const error = filterError(err);
-      res.status(error.statusCode).send({ message: error.message });
+      next(error);
     });
 };
 
