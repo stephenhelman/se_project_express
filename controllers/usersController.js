@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { filterError } = require("../utils/errors");
 const { JWT_SECRET } = require("../utils/config");
+const { filterUserPassword } = require("../utils/utils");
 
 const getUsers = (req, res, next) => {
   User.find({})
@@ -18,7 +19,8 @@ const getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail()
     .then((user) => {
-      res.send({ data: user._doc });
+      const newUserObject = filterUserPassword(user._doc);
+      res.send({ data: newUserObject });
     })
     .catch((err) => {
       const error = filterError(err);
@@ -31,7 +33,8 @@ const createUser = (req, res, next) => {
   bcrypt.hash(password, 10).then((hash) => {
     User.create({ email, password: hash, name, avatar })
       .then((user) => {
-        res.send({ data: user._doc });
+        const newUserObject = filterUserPassword(user._doc);
+        res.send({ data: newUserObject });
       })
       .catch((err) => {
         const error = filterError(err);
@@ -64,7 +67,8 @@ const updateProfile = (req, res, next) => {
   )
     .orFail()
     .then((user) => {
-      res.send({ data: user._doc });
+      const newUserObject = filterUserPassword(user._doc);
+      res.send({ data: newUserObject });
     })
     .catch((err) => {
       const error = filterError(err);
