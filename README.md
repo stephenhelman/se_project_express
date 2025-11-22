@@ -17,7 +17,41 @@ Before committing your code, make sure you edit the file `sprint.txt` in the roo
 This project is utilizing mongodb and express.
 Using the convenience of the mongoose and express node packages for easy code writing.
 
-Currently there are routes to create (POST) and read (GET) users, as well as reading a specific user when given a correct userId
-As for clothing items, you can create, read, update (PUT), and delete (DELETE) clothing items. As for updating, those come in the form of adding and removing unique likes.
+### Functionality
 
-I utilized a errorFilter function to make it easier to handle given errors in the code
+#### - Users
+
+Update a user - PUT "_/users/me_"
+
+Get the current user - GET "_/users/me_"
+
+#### - Auth
+
+Create a user - POST "_/signup_" - includes password hashing for security
+
+Login with credentials - POST "_/signin_"
+
+#### - Clothing Items
+
+Get all clothing items - GET "_/items_"
+
+Create a clothing item - POST "_/items_"
+
+Delete a clothing item - DELETE "_/items/:id_" - include the id of the clothing item in the request path
+
+Add a like to a clothing item - PUT - "_/items/:id/likes_"- include the id of the clothing item in the request path
+
+Remove a like from a clothing item - "_/items/:id/likes_"- include the id of the clothing item in the request path
+
+### Deployment
+
+[Backend Repository](https://github.com/stephenhelman/se_project_express)
+
+[Frontend Repository](https://github.com/stephenhelman/se_project_react)
+
+This project is also [fully deployed](https://www.wtwr.jedimasters.net/)
+
+### Video
+
+Check out my [project pitch](https://www.loom.com/share/db9abf484ecf43c2bbbe9f3ac7a7957f) where I describe my
+project and some challenges I faced while building it.
